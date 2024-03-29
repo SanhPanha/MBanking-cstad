@@ -1,0 +1,27 @@
+server:
+  port: 8888
+
+file:
+  storage-dir: "filestorage/images/"
+springdoc:
+  swagger-ui:
+    path: /
+
+spring:
+  servlet:
+    multipart:
+      max-file-size: 5MB
+      max-request-size: 5MB
+
+  datasource:
+    username: postgres
+    password: Panha12345
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/mobile_banking_cstad
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: create-drop # or update
+    generate-ddl: true
+
+#Configure datasource
