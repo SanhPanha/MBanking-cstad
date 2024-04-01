@@ -1,5 +1,6 @@
 package org.example.mobilebankingcstad.features.user.dto;
 
+import jakarta.validation.constraints.Email;
 import lombok.Builder;
 
 import java.util.Set;

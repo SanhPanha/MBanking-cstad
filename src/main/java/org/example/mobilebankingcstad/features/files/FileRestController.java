@@ -1,6 +1,7 @@
 package org.example.mobilebankingcstad.features.files;
 
 
+import io.swagger.v3.oas.annotations.Operation;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.example.mobilebankingcstad.features.files.dto.FileResponse;
@@ -18,11 +19,9 @@ import java.util.List;
 public class FileRestController {
 
     private final FileService fileService;
-
-
-
     @PostMapping(value = "", consumes = "multipart/form-data")
     @ResponseStatus(HttpStatus.CREATED)
+    @Operation(summary = "Upload single file")
     public BaseResponse<FileResponse> uploadSingleFile(
             @RequestPart("file") MultipartFile file, HttpServletRequest request
     ) {
@@ -33,7 +32,9 @@ public class FileRestController {
                 );
     }
 
+
     @PostMapping(value = "/multiple", consumes = "multipart/form-data")
+    @Operation(summary = "Upload multiple files")
     public List<String> uploadMultipleFiles(@RequestPart("files") MultipartFile[] files) {
         return fileService.uploadMultipleFiles(files);
     }
@@ -42,11 +43,13 @@ public class FileRestController {
 
     //    @Hidden   // use this hide your method @GET.... from the swagger ui
     @GetMapping("/download/{fileName}")
+    @Operation(summary = "Download file")
    public ResponseEntity<?> downloadFile(@PathVariable String fileName, HttpServletRequest request) {
         return fileService.serveFile(fileName, request);
 
     }
     @DeleteMapping(value = "/{fileName}")
+    @Operation(summary = "Delete file")
     public String deleteFile(@PathVariable String fileName) {
         fileService.deleteFile(fileName);
         return "File deleted successfully";
