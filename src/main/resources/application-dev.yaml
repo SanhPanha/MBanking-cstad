@@ -1,11 +1,6 @@
 server:
   port: 8888
 
-file:
-  storage-dir: "filestorage/images/"
-springdoc:
-  swagger-ui:
-    path: /
 
 spring:
   servlet:
@@ -23,5 +18,14 @@ spring:
     hibernate:
       ddl-auto: create-drop # or update
     generate-ddl: true
+
+springdoc:
+  swagger-ui:
+    path: /
+
+file:
+  storage-dir: "filestorage/images/"
+  client-dir: "/images/**"
+
 
 #Configure datasource

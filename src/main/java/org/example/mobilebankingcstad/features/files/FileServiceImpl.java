@@ -1,11 +1,18 @@
 package org.example.mobilebankingcstad.features.files;
 
+import jakarta.servlet.http.HttpServletRequest;
 import org.example.mobilebankingcstad.features.files.dto.FileResponse;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
@@ -20,6 +27,24 @@ public class FileServiceImpl implements FileService {
 
     @Value("${file.storage-dir}")
     String fileStorageDir;
+
+    private String generateImageUrl(HttpServletRequest request,String filename){
+//        return String.format("%s://%s:%s/images/%s",
+//                request.getScheme(),
+//                request.getServerName(),
+//                request.getServerPort(),
+//                filename);
+        return request.getScheme() + "://" + request.getServerName() + ":" + request.getServerPort() + "/images/" + filename;
+    }
+
+    private String generateDownloadImageUrl(HttpServletRequest request, String filename) {
+        return String.format("%s://%s:%d/api/v1/files/download/%s",
+                request.getScheme(),
+                request.getServerName(),
+                request.getServerPort(),
+                filename);
+    }
+
 
     private String uploadFile(MultipartFile file) {
 
@@ -45,13 +70,16 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public FileResponse uploadSingleFile(MultipartFile file) {
+    public FileResponse uploadSingleFile(MultipartFile file, HttpServletRequest request) {
+        String fileName = uploadFile(file);
+        String fullImageUrl = generateImageUrl(request, fileName);
+
         return FileResponse.builder()
-                .downloadUrl("null")
+                .downloadUrl(generateDownloadImageUrl(request, fileName))
                 .fileType(file.getContentType())
                 .fileSize(file.getSize())
-                .fileName(uploadFile(file))
-                .fullUrl("null")
+                .fileName(fileName)
+                .fullUrl(fullImageUrl)
                 .build();
     }
 
@@ -62,6 +90,30 @@ public class FileServiceImpl implements FileService {
             fileNames.add(uploadFile(file));
         }
         return fileNames;
+    }
+
+    @Override
+    public ResponseEntity<Resource> serveFile(String filename, HttpServletRequest request) {
+        try {
+            //        get path of the images
+            Path imagePath = Path.of(fileStorageDir).resolve(filename);
+            Resource resourceUrl = new UrlResource(imagePath.toUri());
+            if(resourceUrl.exists()){
+                return ResponseEntity
+                        .ok()
+                        .contentType(MediaType.parseMediaType("image/jpeg"))
+                        .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + resourceUrl.getFilename() + "\"")
+                        .body(resourceUrl);
+            }else {
+                // bad request
+                throw new RuntimeException("Resources not found ! ");
+            }
+        } catch (MalformedURLException ex) {
+            ex.printStackTrace();
+        }
+
+        return null;
+
     }
 
     @Override
