@@ -6,20 +6,19 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 
 @Service
@@ -27,6 +26,12 @@ public class FileServiceImpl implements FileService {
 
     @Value("${file.storage-dir}")
     String fileStorageDir;
+
+    private static final Set<String> SUPPORTED_IMAGE_TYPES = Set.of(
+            MediaType.IMAGE_JPEG_VALUE,
+            MediaType.IMAGE_PNG_VALUE,
+            MediaType.IMAGE_GIF_VALUE
+    );
 
     private String generateImageUrl(HttpServletRequest request,String filename){
 //        return String.format("%s://%s:%s/images/%s",
@@ -47,6 +52,11 @@ public class FileServiceImpl implements FileService {
 
 
     private String uploadFile(MultipartFile file) {
+
+        String contentType = file.getContentType();
+        if (!SUPPORTED_IMAGE_TYPES.contains(contentType)) {
+            throw new ResponseStatusException(HttpStatus.UNSUPPORTED_MEDIA_TYPE, "Unsupported file type: " + contentType);
+        }
 
         try {
 //       Check if the directory doesn't exist , we will create the directory

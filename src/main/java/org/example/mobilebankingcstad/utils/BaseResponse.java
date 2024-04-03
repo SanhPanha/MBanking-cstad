@@ -13,12 +13,12 @@ public class BaseResponse<T> {
     public static <T> BaseResponse<T> createSuccess(){
         return new BaseResponse<T>()
                 .setStatus(HttpStatus.CREATED.value())
-                .setMessage("Success");
+                .setMessage("Successfully Created");
     }
     public static <T> BaseResponse<T> ok(){
         return new BaseResponse<T>()
                 .setStatus(HttpStatus.CREATED.value())
-                .setMessage("Success");
+                .setMessage("Successfully Created");
     }
 
     public static <T> BaseResponse<T> notFound(){
@@ -31,5 +31,23 @@ public class BaseResponse<T> {
         return new BaseResponse<T>()
                 .setStatus(HttpStatus.BAD_REQUEST.value())
                 .setMessage("Bad Request Provided");
+    }
+
+    public static <T> BaseResponse<T> updateSuccess(){
+        return new BaseResponse<T>()
+                .setStatus(HttpStatus.OK.value())
+                .setMessage("Update Successfully");
+    }
+
+    public static <T> BaseResponse<T> disableSuccess(){
+        return new BaseResponse<T>()
+                .setStatus(HttpStatus.OK.value())
+                .setMessage("Disable Successfully");
+    }
+
+    public static <T> BaseResponse<T> enableSuccess(){
+        return new BaseResponse<T>()
+                .setStatus(HttpStatus.OK.value())
+                .setMessage("Enable Successfully");
     }
 }
