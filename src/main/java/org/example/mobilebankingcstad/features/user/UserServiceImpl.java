@@ -7,6 +7,7 @@ import org.example.mobilebankingcstad.features.roles.RoleRepository;
 import org.example.mobilebankingcstad.features.user.dto.UserRequest;
 import org.example.mobilebankingcstad.features.user.dto.UserResponse;
 import org.example.mobilebankingcstad.features.user.dto.UserUpdateRequest;
+import org.example.mobilebankingcstad.features.userAccount.UserAccountRepository;
 import org.example.mobilebankingcstad.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final UserAccountRepository userAccountRepository;
 
     @Override
     public UserResponse createUser(UserRequest userRequest) {

@@ -14,6 +14,7 @@ import java.util.stream.Collectors;
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
+    @Named("toUserResponse")
     @Mapping(target = "roles", expression = "java(mapRoles(user.getRoles()))")
     @Mapping(target = "studentCardId", source = "studentIdCard")
     UserResponse toUserResponse(User user);

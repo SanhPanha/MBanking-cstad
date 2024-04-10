@@ -27,5 +27,4 @@ file:
   storage-dir: "filestorage/images/"
   client-dir: "/images/**"
 
-
 #Configure datasource
