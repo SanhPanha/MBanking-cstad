@@ -78,4 +78,28 @@ public class AccountRestController {
         return BaseResponse.<List<AccountResponse>>ok()
                 .setPayload(accountService.findAccountsByUserId(id));
     }
+
+    @PatchMapping("/{id}/disable")
+    @Operation(summary = "Disable Account")
+    public BaseResponse<AccountResponse> disableAccount(
+            @Parameter(
+                    description = "Account ID",
+                    required = true,
+                    example = "d7ab27d4-c7bb-4167-9d8f-7e56c75d4472"
+            )
+            @PathVariable String id) {
+        return BaseResponse.<AccountResponse>disableSuccess();
+    }
+
+    @PatchMapping("/{id}/disable")
+    @Operation(summary = "Disable Account")
+    public BaseResponse<AccountResponse> enableAccount(
+            @Parameter(
+                    description = "Account ID",
+                    required = true,
+                    example = "d7ab27d4-c7bb-4167-9d8f-7e56c75d4472"
+            )
+            @PathVariable String id) {
+        return BaseResponse.<AccountResponse>enableSuccess();
+    }
 }

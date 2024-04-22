@@ -7,6 +7,7 @@ import org.example.mobilebankingcstad.features.accountType.AccountTypeRepository
 import org.example.mobilebankingcstad.features.accounts.dto.AccountRequest;
 import org.example.mobilebankingcstad.features.accounts.dto.AccountResponse;
 import org.example.mobilebankingcstad.features.user.UserRepository;
+import org.example.mobilebankingcstad.features.user.dto.UserResponse;
 import org.example.mobilebankingcstad.features.userAccount.UserAccountRepository;
 import org.example.mobilebankingcstad.mapper.AccountMapper;
 import org.springframework.http.HttpStatus;
@@ -109,5 +110,15 @@ public class AccountServiceImpl implements AccountService {
         return userAccountByUserId.stream()
                 .map(accountMapper::mapUserAccountToResponse)
                 .toList();
+    }
+
+    @Override
+    public UserResponse disableAccount(String id) {
+        return null;
+    }
+
+    @Override
+    public UserResponse enableAccount(String id) {
+        return null;
     }
 }
